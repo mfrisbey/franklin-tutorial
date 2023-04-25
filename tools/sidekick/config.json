@@ -2,12 +2,11 @@
     "project": "Project",
     "plugins": [
       {
-        "id": "library",
-        "title": "Library",
+        "id": "content-lake",
+        "title": "Find Assets",
         "environments": [ "edit" ],
-        "isPalette": true,
-        "paletteRect": "top: auto; bottom: 20px; left: 20px; height: 398px; width: 360px;",
-        "url": "/block-library/library",
+        "isPalette": false,
+        "url": "https://test.findmy.media",
         "includePaths": [ "**.docx**" ]
       }
     ]
