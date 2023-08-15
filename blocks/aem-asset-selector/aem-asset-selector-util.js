@@ -24,7 +24,7 @@ function loadScript(url, callback, type) {
 function load(cfg) {
   const imsProps = {
     imsClientId: cfg['ims-client-id'],
-    imsScope: 'additional_info.projectedProductContext,openid,read_organizations,AdobeID,ab.manage',
+    imsScope: 'additional_info.projectedProductContext,openid,read_organizations,AdobeID,ab.manage,creative_cloud',
     redirectUrl: window.location.href,
     modalMode: true,
     imsEnvironment,
