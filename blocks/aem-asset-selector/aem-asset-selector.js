@@ -1,6 +1,6 @@
 import { readBlockConfig } from '../../scripts/lib-franklin.js';
 import {
-  init, renderAssetSelectorWithImsFlow, logoutImsFlow,
+  init, renderAssetSelectorWithImsFlow, logoutImsFlow, refreshToken
 } from './aem-asset-selector-util.js';
 
 export default function decorate(block) {
@@ -11,6 +11,7 @@ export default function decorate(block) {
     <div class="action-container">
         <button id="as-cancel">Sign Out</button>
         <button id="as-submit">Sign In</button>
+        <button id="refresh-token">Refresh Token</button>
     </div>
     <dialog id="asset-selector-dialog">
         <div id="asset-selector" style="height: calc(100vh - 80px); width: calc(100vw - 60px); margin: -20px;">
@@ -19,6 +20,10 @@ export default function decorate(block) {
     `;
   block.querySelector('#as-submit').addEventListener('click', () => {
     renderAssetSelectorWithImsFlow(cfg);
+  });
+
+  block.querySelector('#refresh-token').addEventListener('click', () => {
+    refreshToken();
   });
 
   block.querySelector('#as-cancel').addEventListener('click', () => {
