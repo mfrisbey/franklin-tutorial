@@ -145,8 +145,8 @@ export async function renderAssetSelectorWithImsFlow(cfg) {
   const container = document.getElementById('asset-selector');
   // eslint-disable-next-line no-undef
   PureJSSelectors.renderAssetSelectorWithAuthFlow(container, assetSelectorProps, () => {
-    const assetSelectorDialog = document.getElementById('asset-selector-dialog');
-    assetSelectorDialog.showModal();
+    // const assetSelectorDialog = document.getElementById('asset-selector-dialog');
+    // assetSelectorDialog.showModal();
   });
 }
 

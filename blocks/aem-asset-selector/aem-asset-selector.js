@@ -13,10 +13,8 @@ export default function decorate(block) {
         <button id="as-submit">Sign In</button>
         <button id="refresh-token">Refresh Token</button>
     </div>
-    <dialog id="asset-selector-dialog">
-        <div id="asset-selector" style="height: calc(100vh - 80px); width: calc(100vw - 60px); margin: -20px;">
-        </div>
-    </dialog>
+    <div id="asset-selector" style="height: calc(100vh - 80px); width: calc(100vw - 60px); margin: -20px;">
+    </div>
     `;
   block.querySelector('#as-submit').addEventListener('click', () => {
     renderAssetSelectorWithImsFlow(cfg);
