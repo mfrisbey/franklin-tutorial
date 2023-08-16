@@ -26,10 +26,13 @@ function load(cfg) {
     imsClientId: cfg['ims-client-id'],
     imsScope: 'additional_info.projectedProductContext,openid,read_organizations,AdobeID,ab.manage',
     redirectUrl: window.location.href,
-    modalMode: true,
+    modalMode: false,
     imsEnvironment,
     env: imsEnvironment,
     adobeImsOptions: {
+      modalSettings: {
+        allowOrigin: window.location.origin
+      },
       useLocalStorage: true
     },
     onAccessTokenExpired: () => {
