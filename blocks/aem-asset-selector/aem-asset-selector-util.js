@@ -34,6 +34,7 @@ function load(cfg) {
         allowOrigin: window.location.origin
       }
     },
+    onAccessTokenReceived: cfg.onAccessTokenReceived || (() => {}),
     onAccessTokenExpired: () => {
       // token expired - does token need to be manually refreshed here?
     },
@@ -143,8 +144,12 @@ function handleNavigateToAsset(asset) {
   // onClose();
 }
 
-export async function renderAssetSelectorWithImsFlow(cfg) {
-  const assetSelectorProps = {
+function getAssetSelector() {
+  return document.getElementById('asset-selector');
+}
+
+function buildAssetSelectorProps(cfg) {
+  return {
     repositoryId: cfg['repository-id'],
     imsOrg: cfg['ims-org-id'],
     onClose,
@@ -154,9 +159,16 @@ export async function renderAssetSelectorWithImsFlow(cfg) {
     apiKey: API_KEY,
     rail: true
   };
-  const container = document.getElementById('asset-selector');
+}
+
+export async function renderAssetSelectorWithImsFlow(cfg) {
   // eslint-disable-next-line no-undef
-  PureJSSelectors.renderAssetSelectorWithAuthFlow(container, assetSelectorProps);
+  PureJSSelectors.renderAssetSelectorWithAuthFlow(getAssetSelector(), buildAssetSelectorProps(cfg));
+}
+
+export async function renderAssetSelector(cfg) {
+  // eslint-disable-next-line no-undef
+  PureJSSelectors.renderAssetSelector(getAssetSelector(), buildAssetSelectorProps(cfg));
 }
 
 export async function refreshToken() {
