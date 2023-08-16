@@ -26,14 +26,13 @@ function load(cfg) {
     imsClientId: cfg['ims-client-id'],
     imsScope: 'additional_info.projectedProductContext,openid,read_organizations,AdobeID,ab.manage',
     redirectUrl: window.location.href,
-    modalMode: false,
+    modalMode: true,
     imsEnvironment,
     env: imsEnvironment,
     adobeImsOptions: {
       modalSettings: {
         allowOrigin: window.location.origin
-      },
-      useLocalStorage: true
+      }
     },
     onAccessTokenExpired: () => {
       // token expired - does token need to be manually refreshed here?
