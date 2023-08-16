@@ -1,23 +1,31 @@
-#asset-selector {
-    height: calc(100vh - 80px);
-    width: calc(100vw - 60px);
-    margin: -20px;
-}
-
 footer,
 header {
     display: none;
 }
 
-.aem-asset-selector-container {
-    display: flex;
+main .section.aem-asset-selector-container {
+    padding: 0;
+    margin: 0;
+}
+
+main .section > div.aem-asset-selector-wrapper {
+    padding: 0;
+    margin: 0;
+    max-width: unset;
 }
 
 .action-container {
-    display: flex;
-    justify-content: space-around;
+    position: absolute;
+    right: 20px;
+    z-index: 1;
 }
 
 .action-container > button {
     padding: 10px;
+}
+
+#asset-selector {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
 }

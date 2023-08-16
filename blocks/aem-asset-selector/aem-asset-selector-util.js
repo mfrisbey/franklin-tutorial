@@ -26,29 +26,38 @@ function load(cfg) {
     imsClientId: cfg['ims-client-id'],
     imsScope: 'additional_info.projectedProductContext,openid,read_organizations,AdobeID,ab.manage',
     redirectUrl: window.location.href,
-    modalMode: true,
+    modalMode: false,
     imsEnvironment,
     env: imsEnvironment,
+    adobeImsOptions: {
+      useLocalStorage: true
+    },
+    onAccessTokenExpired: () => {
+      // token expired - does token need to be manually refreshed here?
+    },
+    onErrorReceived: (/* type, msg */) =>  {
+      // handle errors in sign in flow
+    }
   };
   // eslint-disable-next-line no-undef
   const registeredTokenService = PureJSSelectors.registerAssetsSelectorsAuthService(imsProps);
   imsInstance = registeredTokenService;
 }
 
-export function init(cfg, callback) {
-  if (cfg.environment.toUpperCase() === 'STAGE') {
-    imsEnvironment = IMS_ENV_STAGE;
-  } else if (cfg.environment.toUpperCase() === 'PROD') {
-    imsEnvironment = IMS_ENV_PROD;
-  } else {
-    throw new Error('Invalid environment setting!');
-  }
-
-  loadScript(AS_MFE, () => {
-    load(cfg);
-    if (callback) {
-      callback();
+export function init(cfg) {
+  return new Promise((res, rej) => {
+    if (cfg.environment.toUpperCase() === 'STAGE') {
+      imsEnvironment = IMS_ENV_STAGE;
+    } else if (cfg.environment.toUpperCase() === 'PROD') {
+      imsEnvironment = IMS_ENV_PROD;
+    } else {
+      rej(new Error('Invalid environment setting!'));
     }
+  
+    loadScript(AS_MFE, () => {
+      load(cfg);
+      res();
+    });
   });
 }
 
@@ -141,13 +150,11 @@ export async function renderAssetSelectorWithImsFlow(cfg) {
     handleNavigateToAsset,
     env: cfg.environment.toUpperCase(),
     apiKey: API_KEY,
+    rail: true
   };
   const container = document.getElementById('asset-selector');
   // eslint-disable-next-line no-undef
-  PureJSSelectors.renderAssetSelectorWithAuthFlow(container, assetSelectorProps, () => {
-    // const assetSelectorDialog = document.getElementById('asset-selector-dialog');
-    // assetSelectorDialog.showModal();
-  });
+  PureJSSelectors.renderAssetSelectorWithAuthFlow(container, assetSelectorProps);
 }
 
 export async function refreshToken() {
