@@ -20,7 +20,7 @@ export default async function decorate(block) {
     <div class="action-container">
         <button id="as-cancel">Sign Out</button>
     </div>
-    <div id="asset-selector" draggable>
+    <div id="asset-selector">
     </div>
   `;
 
@@ -32,26 +32,6 @@ export default async function decorate(block) {
   block.querySelector('#as-cancel').addEventListener('click', (e) => {
     e.preventDefault();
     logoutImsFlow();
-  });
-
-  const selector = document.querySelector('body');
-  selector.addEventListener('dragstart', () => {
-    console.log('dragstart');
-  });
-  selector.addEventListener('drag', () => {
-    console.log('drag');
-  });
-  selector.addEventListener('dragend', () => {
-    console.log('dragend');
-  });
-  selector.addEventListener('dragenter', () => {
-    console.log('dragenter');
-  });
-  selector.addEventListener('dragleave', () => {
-    console.log('dragleave');
-  });
-  selector.addEventListener('dragover', () => {
-    console.log('dragover');
   });
 
   // give a little time for onAccessTokenReceived() to potentially come in
