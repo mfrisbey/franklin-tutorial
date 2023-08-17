@@ -21,7 +21,7 @@
         "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
       },
       {
-        "id": "asset-library",
+        "id": "asset-library-stage",
         "title": "AEM Assets Library Stage",
         "environments": [
           "edit"
