@@ -157,7 +157,23 @@ function buildAssetSelectorProps(cfg) {
     handleNavigateToAsset,
     env: cfg.environment.toUpperCase(),
     apiKey: API_KEY,
-    rail: true
+    rail: true,
+    acvConfig: {
+      dragOptions: {
+        allowList: {
+          '*': true
+        },
+        iframe: true,
+        iframe_dragStart: () => console.log('drag start'),
+        iframe_dragMove: () => console.log('drag move'),
+        iframe_dragEnd: () => console.log('drag end'),
+        renderDrag: () => console.log('render drag')
+      },
+    },
+    iframe_dragStart: () => console.log('drag start'),
+    iframe_dragMove: () => console.log('drag move'),
+    iframe_dragEnd: () => console.log('drag end'),
+    renderDrag: () => console.log('render drag')
   };
 }
 
