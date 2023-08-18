@@ -2,11 +2,13 @@ import { readBlockConfig } from '../../scripts/lib-franklin.js';
 import {
   init,
   renderAssetSelectorWithImsFlow,
-  logoutImsFlow
+  logoutImsFlow,
+  copyAsset
 } from './aem-asset-selector-util.js';
 
 export default async function decorate(block) {
   let rendered = false;
+  let selected = false;
   const cfg = readBlockConfig(block);
   block.textContent = '';
   block.innerHTML = `
@@ -18,6 +20,7 @@ export default async function decorate(block) {
       </div>
     </div>
     <div class="action-container">
+        <button id="as-copy" class="disabled">Copy</button>
         <button id="as-cancel">Sign Out</button>
     </div>
     <div id="asset-selector">
@@ -27,6 +30,17 @@ export default async function decorate(block) {
   block.querySelector('#as-login').addEventListener('click', (e) => {
     e.preventDefault();
     renderAssetSelectorWithImsFlow(cfg);
+  });
+
+  const copy = block.querySelector('#as-copy');
+  copy.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (selected) {
+      copy.classList.add('disabled');
+      copy.innerText = 'Copying...';
+      await copyAsset(selected);
+      copy.innerText = 'Copied!';
+    }
   });
 
   block.querySelector('#as-cancel').addEventListener('click', (e) => {
@@ -56,6 +70,18 @@ export default async function decorate(block) {
       // in already
       renderAssetSelectorWithImsFlow(cfg);
     }
+  };
+
+  cfg.onAssetSelected = (e) => {
+    selected = e;
+    copy.classList.remove('disabled');
+    copy.innerText = 'Copy';
+  };
+
+  cfg.onAssetDeselected = () => {
+    selected = false;
+    copy.classList.add('disabled');
+    copy.innerText = 'Copy';
   };
 
   init(cfg);

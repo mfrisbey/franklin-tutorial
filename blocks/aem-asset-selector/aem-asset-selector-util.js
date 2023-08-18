@@ -139,6 +139,28 @@ async function handleSelection(selection) {
   // onClose();
 }
 
+export async function copyAsset(asset) {
+  if (!asset || !asset._links) {
+    return;
+  }
+  const download = asset._links['http://ns.adobe.com/adobecloud/rel/download'];
+  if (!download.href) {
+    return;
+  }
+  try {
+    const res = await fetch(download.href, {
+      headers: {
+        Authorization: `Bearer ${imsInstance.getImsToken()}`
+      }
+    });
+    console.log('FETCHING YEAH!', res.ok, res.statusCode);
+  } catch (e) {
+    console.log('ERROR FETCHING', e);
+  }
+
+  return new Promise(res => setTimeout(res, 2000));
+}
+
 // eslint-disable-next-line no-unused-vars
 function handleNavigateToAsset(asset) {
   // onClose();
@@ -148,16 +170,27 @@ function getAssetSelector() {
   return document.getElementById('asset-selector');
 }
 
+function handleAssetSelection(e, cfg) {
+  if (cfg) {
+    if (e.length && cfg.onAssetSelected) {
+      cfg.onAssetSelected(e[0]);
+    } else if (!e.length && cfg.onAssetDeselected) {
+      cfg.onAssetDeselected();
+    }
+  }
+}
+
 function buildAssetSelectorProps(cfg) {
   return {
-    repositoryId: cfg['repository-id'],
-    imsOrg: cfg['ims-org-id'],
     onClose,
     handleSelection,
+    handleAssetSelection: (e) => handleAssetSelection(e, cfg),
     handleNavigateToAsset,
     env: cfg.environment.toUpperCase(),
     apiKey: API_KEY,
-    rail: true
+    hideTreeNav: true,
+    runningInUnifiedShell: false,
+    noWrap: true
   };
 }
 

@@ -28,6 +28,7 @@ main .section > div.aem-asset-selector-wrapper {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    margin-top: 70px;
 }
 
 main .asset-overlay {
@@ -46,4 +47,11 @@ main #login {
     align-items: center;
     flex-direction: column;
     text-align: center;
+}
+
+main button.disabled {
+    color: gray;
+    background-color: lightgray;
+    cursor: pointer;
+    pointer-events: none;
 }
