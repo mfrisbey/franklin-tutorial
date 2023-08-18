@@ -15,13 +15,32 @@ main .section > div.aem-asset-selector-wrapper {
 }
 
 .action-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
     position: absolute;
     right: 20px;
+    left: 20px;
     z-index: 1;
+    height: 70px;
+}
+
+.action-container img {
+    max-height: 40px;
+}
+
+.action-container > div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
 }
 
 .action-container > button {
     padding: 10px;
+    flex-grow: auto;
+    display: none;
 }
 
 #asset-selector {
@@ -33,12 +52,19 @@ main .section > div.aem-asset-selector-wrapper {
 
 main .asset-overlay {
     position: absolute;
-    inset: 0;
+    top: 70px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     background-color: white;
     z-index: 10;
+}
+
+main .asset-overlay.loading {
+    align-items: center;
 }
 
 main #login {
@@ -49,9 +75,18 @@ main #login {
     text-align: center;
 }
 
+main #login p {
+    font-size: 18px;
+    padding: 1rem 2rem;
+}
+
 main button.disabled {
     color: gray;
     background-color: lightgray;
     cursor: pointer;
     pointer-events: none;
+}
+
+main button {
+    width: 120px;
 }

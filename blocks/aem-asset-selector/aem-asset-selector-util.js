@@ -113,21 +113,20 @@ async function getAssetBlob(url) {
   return blob;
 }
 
-async function handleSelection(selection) {
-  const selectedAsset = selection[0];
+function getCopyRendition(asset) {
   let maxRendition = null;
   // eslint-disable-next-line no-underscore-dangle
-  selectedAsset._links['http://ns.adobe.com/adobecloud/rel/rendition'].forEach((rendition) => {
-    if ((!maxRendition || maxRendition.width < rendition.width)) {
-      maxRendition = rendition;
-    }
-  });
-  console.log('Selected rendition:', maxRendition.href);
-  // const assetBlob = await getAssetBlob(maxRendition.href);
-  // const assetMarkup = `<img src="${URL.createObjectURL(assetBlob)}" alt="${selectedAsset.name}" />`;
+  asset._links['http://ns.adobe.com/adobecloud/rel/rendition']
+    .filter((rendition) => rendition.type === 'image/png')
+    .forEach((rendition) => {
+      if ((!maxRendition || maxRendition.width < rendition.width)) {
+        maxRendition = rendition;
+      }
+    });
+  return maxRendition;
+}
 
-  const assetPublicUrl = await getAssetPublicUrl(maxRendition.href.substring(0, maxRendition.href.indexOf('?')));
-  console.log('Asset public URL:', assetPublicUrl);
+async function copyToClipboardWithHtml(assetPublicUrl) {
   const assetMarkup = `<img src="${assetPublicUrl}"  />`;
 
   const data = [
@@ -135,30 +134,65 @@ async function handleSelection(selection) {
     new ClipboardItem({ 'text/html': new Blob([assetMarkup], { type: 'text/html' }) }),
   ];
   // Write the new clipboard contents
-  await navigator.clipboard.write(data);
-  // onClose();
+  return navigator.clipboard.write(data);
+}
+
+async function copyToClipboardWithBinary(assetPublicUrl, mimeType) {
+  const binary = await fetch(assetPublicUrl);
+
+  if (!binary.ok) {
+    throw new Error(`Unexpected status code ${binary.status} retrieving asset binary`);
+  }
+
+  const blob = await binary.blob();
+  const clipboardOptions = {};
+  clipboardOptions[mimeType] = blob;
+  const data = [
+    new ClipboardItem(clipboardOptions)
+  ];
+  return navigator.clipboard.write(data);
+}
+
+async function handleSelection(selection) {
+  const selectedAsset = selection[0];
+  let maxRendition = getCopyRendition(selectedAsset);
+  console.log('Selected rendition:', maxRendition.href);
+  // const assetBlob = await getAssetBlob(maxRendition.href);
+  // const assetMarkup = `<img src="${URL.createObjectURL(assetBlob)}" alt="${selectedAsset.name}" />`;
+
+  const assetPublicUrl = await getAssetPublicUrl(maxRendition.href.substring(0, maxRendition.href.indexOf('?')));
+  console.log('Asset public URL:', assetPublicUrl);
+  return copyToClipboardWithHtml(assetPublicUrl);
 }
 
 export async function copyAsset(asset) {
   if (!asset || !asset._links) {
-    return;
+    return false;
   }
-  const download = asset._links['http://ns.adobe.com/adobecloud/rel/download'];
+  const rendition = getCopyRendition(asset);
+  if (!rendition || !rendition.href) {
+    return false;
+  }
+  const download = rendition._links['http://ns.adobe.com/adobecloud/rel/download'];
   if (!download.href) {
-    return;
+    return false;
   }
   try {
-    const res = await fetch(download.href, {
+    const url = download.href;
+    const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${imsInstance.getImsToken()}`
       }
     });
-    console.log('FETCHING YEAH!', res.ok, res.statusCode);
+    if (res.ok) {
+      const downloadJson = await res.json();
+      await copyToClipboardWithBinary(downloadJson.href, downloadJson.type);
+    }
   } catch (e) {
-    console.log('ERROR FETCHING', e);
+    console.log('error requesting asset information', e);
   }
 
-  return new Promise(res => setTimeout(res, 2000));
+  return true;
 }
 
 // eslint-disable-next-line no-unused-vars

@@ -12,14 +12,15 @@ export default async function decorate(block) {
   const cfg = readBlockConfig(block);
   block.textContent = '';
   block.innerHTML = `
-    <div class="asset-overlay">
+    <div class="asset-overlay loading">
       <img id="loading" src="${cfg.loading}" />
       <div id="login">
-        <p>Welcome to the Asset Selector! After signing in you'll have the option to select which assets to use.</p>
+        <p>Welcome to the Asset Selector! Please Sign In to view your assets.</p>
         <button id="as-login">Sign In</button>
       </div>
     </div>
     <div class="action-container">
+        <div><img src="${cfg.logo}" /></div>
         <button id="as-copy" class="disabled">Copy</button>
         <button id="as-cancel">Sign Out</button>
     </div>
@@ -38,8 +39,13 @@ export default async function decorate(block) {
     if (selected) {
       copy.classList.add('disabled');
       copy.innerText = 'Copying...';
-      await copyAsset(selected);
-      copy.innerText = 'Copied!';
+      const success = await copyAsset(selected);
+      if (success) {
+        copy.innerText = 'Copied!';
+      } else {
+        copy.innerText = 'Error!';
+      }
+      copy.classList.remove('disabled');
     }
   });
 
@@ -50,10 +56,12 @@ export default async function decorate(block) {
 
   // give a little time for onAccessTokenReceived() to potentially come in
   setTimeout(() => {
-    if (block.querySelector('.asset-overlay').style.display !== 'none') {
+    const overlay = block.querySelector('.asset-overlay');
+    if (overlay.style.display !== 'none') {
       // at this point the overlay is still visible, meaning that we haven't
       // gotten an event indicating the user is logged in. Display the
       // sign in interface
+      overlay.classList.remove('loading');
       block.querySelector('#loading').style.display = 'none';
       block.querySelector('#login').style.display = 'flex';
     }
@@ -64,6 +72,7 @@ export default async function decorate(block) {
   // the asset selector
   cfg.onAccessTokenReceived = () => {
     block.querySelector('.asset-overlay').style.display = 'none';
+    block.querySelectorAll('.action-container button').forEach((button) => button.style.display = 'block');
     if (!rendered) {
       rendered = true;
       // calling this shouldn't prompt the user to log in, since they're logged
