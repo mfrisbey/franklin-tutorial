@@ -15,7 +15,7 @@
         "environments": [
           "edit"
         ],
-        "url": "/aem-asset-selector",
+        "url": "https://localhost.corp.adobe.com:8080/packages/%40assets/selectors/src/render/franklin/aem-asset-selector.html?repository-id=author-p18757-e48049.adobeaemcloud.com&ims-client-id=p18757-franklin-assets-integration",
         "isPalette": true,
         "includePaths": [ "**.docx**" ],
         "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
@@ -26,20 +26,10 @@
         "environments": [
           "edit"
         ],
-        "url": "http://localhost:3000/aem-asset-selector-stage",
+        "url": "https://localhost.corp.adobe.com:8080/packages/%40assets/selectors/src/render/franklin/aem-asset-selector.html?repository-id=author-p72752-e189685-cmstg.adobeaemcloud.com&environment=STAGE",
         "isPalette": true,
         "includePaths": [ "**.docx**" ],
         "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
-      },
-      {
-        "id": "drag-drop-test",
-        "title": "Test Drag Drop",
-        "environments": [
-          "edit"
-        ],
-        "url": "https://main--franklin-tutorial--mfrisbey.hlx.page/dragdrop",
-        "isPalette": false,
-        "includePaths": [ "**.docx**" ]
       }
     ]
   }
