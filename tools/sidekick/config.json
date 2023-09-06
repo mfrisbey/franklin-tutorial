@@ -15,7 +15,7 @@
         "environments": [
           "edit"
         ],
-        "url": "https://localhost.corp.adobe.com:8080/packages/%40assets/selectors/src/renderer/franklin/asset-selector.html?repository-id=author-p18757-e48049.adobeaemcloud.com&ims-client-id=p18757-franklin-assets-integration",
+        "url": "https://experience.adobe.com/solutions/CQ-assets-selectors/static-assets/resources/franklin/asset-selector.html",
         "isPalette": true,
         "includePaths": [ "**.docx**" ],
         "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
